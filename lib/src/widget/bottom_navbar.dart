@@ -20,37 +20,40 @@ class _BottomNavbarState extends State<BottomNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      onTap: (value) {
-        final routedItem =
-            navItems.firstWhere((item) => item['index'] == value);
-        Navigator.of(context).pushReplacementNamed(routedItem['routeName']);
-      },
-      currentIndex: widget.index,
-      selectedItemColor: Colors.teal,
-      unselectedItemColor: Colors.blueGrey,
-      backgroundColor: Theme.of(context).bottomAppBarColor,
-      iconSize: 30,
-      selectedIconTheme: IconThemeData(size: 30),
-      showUnselectedLabels: false,
-      // items: [
-      //   BottomNavigationBarItem(
-      //     icon: Icon(Icons.home),
-      //     title: Text('Home'),
-      //   ),
-      //   BottomNavigationBarItem(
-      //     icon: Icon(Icons.history),
-      //     title: Text('History'),
-      //   ),
-      //   BottomNavigationBarItem(
-      //     icon: Icon(Icons.settings),
-      //     title: Text('Settting'),
-      //   ),
-      // ],
-      items: navItems
-          .map((item) => BottomNavigationBarItem(
-              icon: Icon(item['icon']), title: Text(item['title'])))
-          .toList(),
+    return ClipRRect(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      child: BottomNavigationBar(
+        onTap: (value) {
+          final routedItem =
+              navItems.firstWhere((item) => item['index'] == value);
+          Navigator.of(context).pushReplacementNamed(routedItem['routeName']);
+        },
+        currentIndex: widget.index,
+        selectedItemColor: Colors.teal,
+        unselectedItemColor: Colors.blueGrey,
+        backgroundColor: Theme.of(context).bottomAppBarColor,
+        iconSize: 30,
+        selectedIconTheme: IconThemeData(size: 30),
+        showUnselectedLabels: false,
+        // items: [
+        //   BottomNavigationBarItem(
+        //     icon: Icon(Icons.home),
+        //     title: Text('Home'),
+        //   ),
+        //   BottomNavigationBarItem(
+        //     icon: Icon(Icons.history),
+        //     title: Text('History'),
+        //   ),
+        //   BottomNavigationBarItem(
+        //     icon: Icon(Icons.settings),
+        //     title: Text('Settting'),
+        //   ),
+        // ],
+        items: navItems
+            .map((item) => BottomNavigationBarItem(
+                icon: Icon(item['icon']), title: Text(item['title'])))
+            .toList(),
+      ),
     );
   }
 }
