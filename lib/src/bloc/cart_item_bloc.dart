@@ -19,6 +19,24 @@ class CartItemBloc {
     );
   }
 
+  upQty(CartItem item) {
+    _cartItems.firstWhere((el) => el.item.name == item.item.name).quantity++;
+    _controller.sink.add(_cartItems);
+  }
+
+  downQty(CartItem item) {
+    if (_cartItems.firstWhere((el) => el.item.name == item.item.name).quantity >
+        1) {
+      _cartItems.firstWhere((el) => el.item.name == item.item.name).quantity--;
+    }
+    _controller.sink.add(_cartItems);
+  }
+
+  remove(CartItem item) {
+    _cartItems.removeWhere((el) => el.item.name == item.item.name);
+    _controller.sink.add(_cartItems);
+  }
+
   dispose() {
     _controller.close();
   }

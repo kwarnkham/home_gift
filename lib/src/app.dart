@@ -9,9 +9,12 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          appBarTheme: AppBarTheme(color: Colors.transparent, elevation: 0),
+          scaffoldBackgroundColor: Colors.transparent,
           primarySwatch: HomeGiftTheme.primarcySwatch,
           accentColor: HomeGiftTheme.secondayColor,
           bottomAppBarColor: HomeGiftTheme.primaryColor),
+          
       title: 'Home Gift',
       routes: {
         Home.routeName: (_) => Container(

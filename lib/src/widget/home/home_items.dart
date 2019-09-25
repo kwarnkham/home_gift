@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../model/item.dart';
 import '../../appData.dart';
-import 'package:transparent_image/transparent_image.dart';
 import '../../bloc/item_bloc.dart';
 import '../../ui/item_detail.dart';
 

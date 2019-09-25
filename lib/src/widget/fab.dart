@@ -3,6 +3,7 @@ import 'package:home_gift/src/home_gift_theme.dart';
 import 'package:badges/badges.dart';
 import '../bloc/cart_item_bloc.dart';
 import '../model/cart_item.dart';
+import '../ui/cart.dart';
 
 class Fab extends StatefulWidget {
   @override
@@ -10,6 +11,10 @@ class Fab extends StatefulWidget {
 }
 
 class _FabState extends State<Fab> {
+  goToCartPage() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => Cart()));
+  }
+
   @override
   void initState() {
     cartItemBloc.getCartItems();
@@ -39,7 +44,9 @@ class _FabState extends State<Fab> {
             }
             return Icon(Icons.shopping_cart);
           }),
-      onPressed: () {},
+      onPressed: () {
+        goToCartPage();
+      },
     );
   }
 }

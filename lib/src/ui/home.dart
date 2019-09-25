@@ -16,7 +16,6 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
 
       bottomNavigationBar: BottomNavbar(index: 0),
 
@@ -25,7 +24,6 @@ class Home extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            backgroundColor: Colors.transparent,
             floating: true,
             title: Text('Home Gift'),
             actions: <Widget>[

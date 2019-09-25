@@ -35,12 +35,14 @@ class _ItemDetailState extends State<ItemDetail> {
   addToCart() {
     CartItem cartItem = CartItem(widget.item, quantity);
     if (cartItems.any((el) => el.item.name == cartItem.item.name)) {
-      cartItems.firstWhere((el)=>el.item.name == cartItem.item.name).quantity += cartItem.quantity;
+      cartItems
+          .firstWhere((el) => el.item.name == cartItem.item.name)
+          .quantity += cartItem.quantity;
     }
     if (!cartItems.any((el) => el.item.name == cartItem.item.name)) {
       cartItems.add(cartItem);
     }
-    
+
     cartItemBloc.addToCart(cartItems);
     Navigator.of(context).pop();
   }
@@ -69,10 +71,8 @@ class _ItemDetailState extends State<ItemDetail> {
             ]),
       ),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.transparent,
           title: Text(widget.item.name),
           actions: <Widget>[
             IconButton(
