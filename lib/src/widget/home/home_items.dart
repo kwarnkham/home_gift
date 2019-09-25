@@ -11,15 +11,17 @@ class HomeItems extends StatefulWidget {
 }
 
 class _HomeItemsState extends State<HomeItems> {
-  itemDetail(context, name) {
+  ItemBloc itemBloc;
+  itemDetail(context, item) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => ItemDetail(
-              name: name,
+              item: item,
             )));
   }
 
   @override
   void initState() {
+    itemBloc = new ItemBloc();
     itemBloc.getItems();
     super.initState();
   }
@@ -29,7 +31,7 @@ class _HomeItemsState extends State<HomeItems> {
     itemBloc.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Item>>(
@@ -51,13 +53,13 @@ class _HomeItemsState extends State<HomeItems> {
                             child: GestureDetector(
                                 onTap: () {
                                   itemDetail(
-                                      context, snapshot.data[index].name);
+                                      context, snapshot.data[index]);
                                 },
-                                child: FadeInImage.memoryNetwork(
-                                  placeholder: kTransparentImage,
+                                child: FadeInImage.assetNetwork(
+                                  placeholder: 'assets/images/item_placeholder.png',
                                   image: snapshot.data[index].images.length > 0
                                       ? '${AppData.imageHost}/${snapshot.data[index].images[0].name}'
-                                      : '${AppData.imageHost}/image-1.jpg',
+                                      : '${AppData.imageHost}/item_placeholder.png',
                                   fit: BoxFit.cover,
                                 )),
                             height: 130,
@@ -79,7 +81,12 @@ class _HomeItemsState extends State<HomeItems> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
                                     color: Colors.greenAccent),
-                                child: Icon(Icons.add_shopping_cart),
+                                child: GestureDetector(
+                                  child: Icon(Icons.add_shopping_cart),
+                                  onTap: (){
+                                    itemDetail(context, snapshot.data[index]);
+                                  },
+                                ),
                               ),
                             ],
                           )

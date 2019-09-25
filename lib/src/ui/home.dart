@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../home_gift_theme.dart';
 import '../ui/search_item.dart';
 import '../widget/home/home_carosel.dart';
 import '../widget/home/home_locations.dart';
@@ -29,7 +30,7 @@ class Home extends StatelessWidget {
             title: Text('Home Gift'),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.search),
+                icon: Icon(Icons.search, color: HomeGiftTheme.primarcySwatch,),
                 onPressed: () {
                   searchItem(context);
                 },

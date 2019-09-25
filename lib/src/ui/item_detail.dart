@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:home_gift/src/bloc/cart_item_bloc.dart';
 import '../home_gift_theme.dart';
+import '../model/item.dart';
+import '../widget/item_detail/item_detail_pictures.dart';
+import '../widget/item_detail/item_detail_quantity.dart';
+import '../model/cart_item.dart';
+import 'package:badges/badges.dart';
 
 class ItemDetail extends StatefulWidget {
-  final String name;
-
-  ItemDetail({this.name});
+  final Item item;
+  ItemDetail({this.item});
 
   @override
   _ItemDetailState createState() => _ItemDetailState();
 }
 
 class _ItemDetailState extends State<ItemDetail> {
-  final String description =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-
-  final List<String> images = [
-    'carosel-image-1.jpg',
-    'carosel-image-2.jpg',
-    'carosel-image-3.jpg',
-    'carosel-image-4.jpg',
-    'carosel-image-5.jpg'
-  ];
-
   int quantity;
-
+  List<CartItem> cartItems;
   upQty() {
     setState(() {
       quantity++;
@@ -39,9 +32,27 @@ class _ItemDetailState extends State<ItemDetail> {
     });
   }
 
+  addToCart() {
+    CartItem cartItem = CartItem(widget.item, quantity);
+    if (cartItems.any((el) => el.item.name == cartItem.item.name)) {
+      cartItems.firstWhere((el)=>el.item.name == cartItem.item.name).quantity += cartItem.quantity;
+    }
+    if (!cartItems.any((el) => el.item.name == cartItem.item.name)) {
+      cartItems.add(cartItem);
+    }
+    
+    cartItemBloc.addToCart(cartItems);
+    Navigator.of(context).pop();
+  }
+
   @override
   void initState() {
     quantity = 1;
+    cartItemBloc.items.listen((items) {
+      cartItems = items;
+    });
+    cartItemBloc.getCartItems();
+
     super.initState();
   }
 
@@ -62,10 +73,28 @@ class _ItemDetailState extends State<ItemDetail> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          title: Text(widget.name),
+          title: Text(widget.item.name),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.favorite_border),
+              iconSize: 40,
+              icon: StreamBuilder<List<CartItem>>(
+                  stream: cartItemBloc.items,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      int cartQuantity = 0;
+                      snapshot.data.forEach(
+                          (cartItem) => cartQuantity += cartItem.quantity);
+                      return Badge(
+                        showBadge: snapshot.data.length > 0 ? true : false,
+                        badgeContent: Text(cartQuantity.toString()),
+                        animationDuration: Duration(milliseconds: 100),
+                        animationType: BadgeAnimationType.scale,
+                        badgeColor: HomeGiftTheme.infoColor,
+                        child: Icon(Icons.shopping_cart),
+                      );
+                    }
+                    return Icon(Icons.shopping_cart);
+                  }),
               onPressed: () {},
               color: HomeGiftTheme.secondayColor,
             )
@@ -77,100 +106,35 @@ class _ItemDetailState extends State<ItemDetail> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                CarouselSlider(
-                  enableInfiniteScroll: false,
-                  viewportFraction: 0.8,
-                  height: 200.0,
-                  enlargeCenterPage: true,
-                  items: images.map((image) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: Image.asset(
-                              'assets/images/$image',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  }).toList(),
-                ),
+                ItemDetailPictures(widget.item),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('1500 MMK'),
-                    Text('1 Kg'),
+                    Text(widget.item.price.toString()),
+                    Text('${widget.item.weight} kg'),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Merchant'),
-                    Text('Location'),
+                    Text(widget.item.merchant.name),
+                    Text(widget.item.location.name),
                   ],
                 ),
                 Text(
                   'Description',
                   style: TextStyle(fontSize: 30),
                 ),
-                Text(description),
+                Text(widget.item.description),
                 Text(
                   'Notice',
                   style: TextStyle(fontSize: 25),
                 ),
-                Text(
-                    'If there is some information needed to be disclosed, we will put it here as notice. For example, expiration date.'),
+                Text(widget.item.notice),
                 SizedBox(
                   height: 20,
                 ),
-                Center(
-                  child: Container(
-                    height: 70,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.transparent),
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: LinearGradient(
-                            colors: [Colors.green[300], Colors.green[100]],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight)),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 17),
-                          child: Text(
-                            'Quantity: $quantity',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                        ButtonBar(
-                          alignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () {
-                                upQty();
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.remove),
-                              onPressed: quantity > 1
-                                  ? () {
-                                      downQty();
-                                    }
-                                  : null,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                ItemDetailQuantity(quantity, upQty, downQty),
                 SizedBox(
                   height: 20,
                 ),
@@ -188,7 +152,9 @@ class _ItemDetailState extends State<ItemDetail> {
                           Icon(Icons.add_shopping_cart),
                         ],
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        addToCart();
+                      },
                     ),
                   ],
                 )

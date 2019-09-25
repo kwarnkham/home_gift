@@ -19,4 +19,4 @@ class ItemBloc {
   }
 }
 
-final itemBloc = ItemBloc();
+// final itemBloc = ItemBloc();
