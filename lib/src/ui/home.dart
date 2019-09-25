@@ -24,6 +24,7 @@ class Home extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            backgroundColor: HomeGiftTheme.gradientFirstColor,
             floating: true,
             title: Text('Home Gift'),
             actions: <Widget>[

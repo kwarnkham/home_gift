@@ -3,8 +3,6 @@ import '../home_gift_theme.dart';
 import '../bloc/cart_item_bloc.dart';
 import '../model/cart_item.dart';
 import '../appData.dart';
-import 'package:badges/badges.dart';
-import '../home_gift_theme.dart';
 
 class Cart extends StatelessWidget {
   removeCartItem(CartItem item, context) {
@@ -50,45 +48,55 @@ class Cart extends StatelessWidget {
             ]),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Cart'),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: StreamBuilder<List<CartItem>>(
-                  stream: cartItemBloc.items,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      int cartQuantity = 0;
-                      snapshot.data.forEach(
-                          (cartItem) => cartQuantity += cartItem.quantity);
-                      return Badge(
-                        showBadge: snapshot.data.length > 0 ? true : false,
-                        badgeContent: Text(cartQuantity.toString()),
-                        animationType: BadgeAnimationType.scale,
-                        badgeColor: HomeGiftTheme.infoColor,
-                        child: Icon(
-                          Icons.shopping_cart,
-                          size: 40,
-                          color: HomeGiftTheme.secondayColor,
-                        ),
-                      );
-                    }
-                    return Icon(
-                      Icons.shopping_cart,
-                      size: 28,
-                    );
-                  }),
-            )
-          ],
-        ),
         body: StreamBuilder<List<CartItem>>(
             stream: cartItemBloc.items,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                int cartQuantity = 0;
+                int totalAmount = 0;
+                snapshot.data
+                    .forEach((cartItem) => cartQuantity += cartItem.quantity);
+                snapshot.data.forEach((cartItem) =>
+                    totalAmount += cartItem.quantity * cartItem.item.price);
                 if (snapshot.data.length > 0) {
                   return CustomScrollView(
                     slivers: <Widget>[
+                      SliverAppBar(
+                        actions: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.check_circle_outline),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (_) => ClipRRect(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20)),
+                                        child: BottomSheet(
+                                          backgroundColor:
+                                              HomeGiftTheme.gradientFirstColor,
+                                          builder: (_) => Container(
+                                            height: 300,
+                                          ),
+                                          onClosing: () {},
+                                        ),
+                                      ));
+                            },
+                            color: HomeGiftTheme.secondayColor,
+                          )
+                        ],
+                        backgroundColor: HomeGiftTheme.gradientFirstColor,
+                        floating: true,
+                        expandedHeight: 100.0,
+                        title: Text('Total item item quantity: $cartQuantity'),
+                        flexibleSpace: FlexibleSpaceBar(
+                          title: Text(
+                            'Total Amount: $totalAmount MMK',
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal, fontSize: 12),
+                          ),
+                        ),
+                      ),
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) => Card(
@@ -115,12 +123,18 @@ class Cart extends StatelessWidget {
                                 children: <Widget>[
                                   Text(snapshot.data[index].item.name),
                                   Text(
-                                      '${snapshot.data[index].item.price.toString()} MMK'),
+                                      '${snapshot.data[index].item.price * snapshot.data[index].quantity} MMK'),
                                 ],
                               ),
                               subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(snapshot.data[index].item.description),
+                                  Text(
+                                    'Unit Price: ${snapshot.data[index].item.price} MMK',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[
@@ -164,7 +178,20 @@ class Cart extends StatelessWidget {
                   );
                 }
                 if (snapshot.data.length <= 0) {
-                  return Center(child: Text('No items in cart'));
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('No item in cart'),
+                        RaisedButton(
+                          child: Text('Back'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  );
                 }
               }
               return SizedBox();
