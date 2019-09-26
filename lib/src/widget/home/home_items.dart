@@ -39,7 +39,7 @@ class _HomeItemsState extends State<HomeItems> {
           if (snapshot.hasData) {
             return SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 10 / 11),
+                  crossAxisCount: 2, childAspectRatio: 10 / 13),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   return Card(
