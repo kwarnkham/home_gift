@@ -9,7 +9,9 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="home_gift"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="true"
+        android:fullBackupContent="false">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

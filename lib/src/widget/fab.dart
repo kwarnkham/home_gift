@@ -4,6 +4,7 @@ import 'package:badges/badges.dart';
 import '../bloc/cart_item_bloc.dart';
 import '../model/cart_item.dart';
 import '../ui/cart.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Fab extends StatefulWidget {
   @override
@@ -11,7 +12,10 @@ class Fab extends StatefulWidget {
 }
 
 class _FabState extends State<Fab> {
-  goToCartPage() {
+  goToCartPage() async {
+    final storage = new FlutterSecureStorage();
+    String localToken = await storage.read(key: 'hGApiToken');
+    print('localToken is $localToken');
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => Cart()));
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widget/home_gift_wrapper.dart';
-import '../widget/submit_button.dart';
+import '../widget/sign_up/sign_up_button_section.dart';
+import '../bloc/user_bloc.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -8,10 +9,37 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   bool hiddenPassword1 = true;
   bool hiddenPassword2 = true;
   String password;
+  Map<String, dynamic> formData = Map();
+
+  Future submitSignUp() async {
+    isLoading = true;
+    print(isLoading);
+    dynamic user;
+    FocusScope.of(context).unfocus();
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      await userBloc
+          .signUp(
+        formData['name'],
+        formData['mobile'],
+        formData['address'],
+        formData['password'],
+        formData['passwordConfirmation'],
+      )
+          .then((value) {
+        isLoading = false;
+        print(isLoading);
+        user = value;
+      });
+    }
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return HomeGiftWrapper(
@@ -28,6 +56,9 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
+                    onSaved: (value) {
+                      formData['name'] = value;
+                    },
                     autofocus: true,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.person),
@@ -45,12 +76,15 @@ class _SignUpState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
+                    onSaved: (value) {
+                      formData['address'] = value;
+                    },
                     keyboardType: TextInputType.multiline,
                     maxLines: 3,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.location_city),
                       border: OutlineInputBorder(),
-                      labelText: 'Delivery Address',
+                      labelText: 'Address',
                     ),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -63,6 +97,9 @@ class _SignUpState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
+                    onSaved: (value) {
+                      formData['mobile'] = value;
+                    },
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.phone_iphone),
@@ -86,6 +123,9 @@ class _SignUpState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
+                    onSaved: (value) {
+                      formData['password'] = value;
+                    },
                     onChanged: (value) {
                       password = value;
                     },
@@ -120,6 +160,9 @@ class _SignUpState extends State<SignUp> {
                     height: 20,
                   ),
                   TextFormField(
+                    onSaved: (value) {
+                      formData['passwordConfirmation'] = value;
+                    },
                     obscureText: hiddenPassword2,
                     keyboardType: TextInputType.visiblePassword,
                     decoration: InputDecoration(
@@ -153,22 +196,11 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      SubmitButton(label: 'Register', onPress: () {
-                        FocusScope.of(context).unfocus();
-                        _formKey.currentState.validate();
-                      }),
-                      FlatButton(
-                        textTheme: ButtonTextTheme.primary,
-                        child: Text('Login'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      )
-                    ],
+                  SignUpButtonSection(submitSignUp),
+                  SizedBox(
+                    height: 20,
                   ),
+                  isLoading ? LinearProgressIndicator() : SizedBox(),
                 ],
               ),
             ),
