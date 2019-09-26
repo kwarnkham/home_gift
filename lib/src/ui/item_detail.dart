@@ -6,6 +6,7 @@ import '../widget/item_detail/item_detail_pictures.dart';
 import '../widget/item_detail/item_detail_quantity.dart';
 import '../model/cart_item.dart';
 import 'package:badges/badges.dart';
+import '../widget/item_detail/item_detail_bottom_app_bar.dart';
 
 class ItemDetail extends StatefulWidget {
   final Item item;
@@ -100,6 +101,7 @@ class _ItemDetailState extends State<ItemDetail> {
             )
           ],
         ),
+        bottomNavigationBar: ItemDetailBottomAppBar(addToCart),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -138,26 +140,6 @@ class _ItemDetailState extends State<ItemDetail> {
                 SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    RaisedButton(
-                      color: HomeGiftTheme.primaryColor,
-                      child: Row(
-                        children: <Widget>[
-                          Text('Add to cart'),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(Icons.add_shopping_cart),
-                        ],
-                      ),
-                      onPressed: () {
-                        addToCart();
-                      },
-                    ),
-                  ],
-                )
               ],
             ),
           ),
