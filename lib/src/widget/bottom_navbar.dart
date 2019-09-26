@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../ui/home.dart';
+import '../ui/history.dart';
+import '../ui/user.dart';
 
 class BottomNavbar extends StatefulWidget {
   final int index;
@@ -9,13 +12,9 @@ class BottomNavbar extends StatefulWidget {
 
 class _BottomNavbarState extends State<BottomNavbar> {
   List<Map<String, dynamic>> navItems = [
-    {'title': 'Home', 'routeName': '/', 'icon': Icons.home, 'index': 0},
-    {
-      'title': 'History',
-      'routeName': '/history',
-      'icon': Icons.history,
-      'index': 1
-    },
+    Home.routeInfo,
+    History.routeInfo,
+    User.routeInfo,
   ];
 
   @override
@@ -23,10 +22,16 @@ class _BottomNavbarState extends State<BottomNavbar> {
     return ClipRRect(
       borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       child: BottomNavigationBar(
-        onTap: (value) {
-          final routedItem =
-              navItems.firstWhere((item) => item['index'] == value);
-          Navigator.of(context).pushReplacementNamed(routedItem['routeName']);
+        onTap: (navIndex) {
+          Map<String, dynamic> routedItem;
+          navItems.asMap().forEach((index, value) {
+            if (index == navIndex) {
+              routedItem = value;
+            }
+          });
+          if (routedItem != null) {
+            Navigator.of(context).pushReplacementNamed(routedItem['routeName']);
+          }
         },
         currentIndex: widget.index,
         selectedItemColor: Colors.teal,

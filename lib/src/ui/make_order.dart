@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:home_gift/src/widget/make_order/submit_order.dart';
 import '../home_gift_theme.dart';
-import '../widget/make_order/make_order_bottom_app_bar.dart';
+import '../widget/submit_button.dart';
 
 class MakeOrder extends StatefulWidget {
   @override
@@ -90,8 +89,10 @@ class _MakeOrderState extends State<MakeOrder> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20,),
-                  SubmitOrder()
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SubmitButton(label: 'Send Order', onPress: () {}),
                 ],
               ),
             ),

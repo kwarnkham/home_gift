@@ -8,19 +8,20 @@ import '../widget/home/home_items.dart';
 import '../widget/fab.dart';
 
 class Home extends StatelessWidget {
-  static const String routeName = '/';
+  static const Map<String, dynamic> routeInfo = {
+    'title': 'Home',
+    'routeName':'/',
+    'icon': Icons.home,
+  };
   searchItem(context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => SearchItem()));
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       bottomNavigationBar: BottomNavbar(index: 0),
-
       floatingActionButton: Fab(),
-
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -29,7 +30,10 @@ class Home extends StatelessWidget {
             title: Text('Home Gift'),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.search, color: HomeGiftTheme.primarcySwatch,),
+                icon: Icon(
+                  Icons.search,
+                  color: HomeGiftTheme.primarcySwatch,
+                ),
                 onPressed: () {
                   searchItem(context);
                 },

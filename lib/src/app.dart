@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'ui/home.dart';
 import 'ui/history.dart';
-import 'home_gift_theme.dart';
+import 'ui/user.dart';
+import './widget/home_gift_wrapper.dart';
+import './home_gift_theme.dart';
 
 class App extends StatelessWidget {
   @override
@@ -14,23 +16,17 @@ class App extends StatelessWidget {
           primarySwatch: HomeGiftTheme.primarcySwatch,
           accentColor: HomeGiftTheme.secondayColor,
           bottomAppBarColor: HomeGiftTheme.primaryColor),
-          
       title: 'Home Gift',
       routes: {
-        Home.routeName: (_) => Container(
+        Home.routeInfo['routeName']: (_) => HomeGiftWrapper(
               child: Home(),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    HomeGiftTheme.gradientFirstColor,
-                    HomeGiftTheme.gradientSecondColor
-                  ],
-                  begin: HomeGiftTheme.gradientStart,
-                  end: HomeGiftTheme.graidentEnd,
-                ),
-              ),
             ),
-        History.routeName: (_) => History()
+        History.routeInfo['routeName']: (_) => HomeGiftWrapper(
+              child: History(),
+            ),
+        User.routeInfo['routeName']: (_) => HomeGiftWrapper(
+              child: User(),
+            ),
       },
     );
   }

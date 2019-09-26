@@ -11,7 +11,9 @@ class ItemBloc {
 
   Future getItems() async {
     List<Item> items = await _repository.getItems();
-    _controller.sink.add(items);
+    if (!_controller.isClosed) {
+      _controller.sink.add(items);
+    }
   }
 
   dispose() {
