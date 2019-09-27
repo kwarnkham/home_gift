@@ -39,57 +39,69 @@ class _HomeItemsState extends State<HomeItems> {
           if (snapshot.hasData) {
             return SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 10 / 13),
+                crossAxisCount: 2,
+                childAspectRatio: 10 / 13,
+              ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return Card(
-                    elevation: 20,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            child: GestureDetector(
-                                onTap: () {
-                                  itemDetail(
-                                      context, snapshot.data[index]);
-                                },
-                                child: FadeInImage.assetNetwork(
-                                  placeholder: 'assets/images/item_placeholder.png',
-                                  image: snapshot.data[index].images.length > 0
-                                      ? '${AppData.imageHost}/${snapshot.data[index].images[0].name}'
-                                      : '${AppData.imageHost}/item_placeholder.png',
-                                  fit: BoxFit.cover,
-                                )),
-                            height: 130,
-                          ),
-                          Text(
-                            '${snapshot.data[index].name} ${snapshot.data[index].description}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text('Price: ${snapshot.data[index].price} kyat'),
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.greenAccent),
-                                child: GestureDetector(
-                                  child: Icon(Icons.add_shopping_cart),
-                                  onTap: (){
+                  return LayoutBuilder(
+                    builder: (_, constraints) => Card(
+                      elevation: 20,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              child: GestureDetector(
+                                  onTap: () {
                                     itemDetail(context, snapshot.data[index]);
                                   },
-                                ),
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder:
+                                        'assets/images/item_placeholder.png',
+                                    image: snapshot.data[index].images.length >
+                                            0
+                                        ? '${AppData.imageHost}/${snapshot.data[index].images[0].name}'
+                                        : '${AppData.imageHost}/item_placeholder.png',
+                                    fit: BoxFit.cover,
+                                  )),
+                              height: (constraints.maxHeight - 8) *
+                                  0.6, //card has default margin of 8
+                            ),
+                            SizedBox(
+                              height: (constraints.maxHeight - 8) * 0.15,
+                              child: Text(
+                                '${snapshot.data[index].name} ${snapshot.data[index].description}',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
                               ),
-                            ],
-                          )
-                        ],
+                            ),
+                            SizedBox(
+                              height: (constraints.maxHeight - 8) * 0.25,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                      'Price: ${snapshot.data[index].price} kyat'),
+                                  Container(
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.greenAccent),
+                                    child: GestureDetector(
+                                      child: Icon(Icons.add_shopping_cart),
+                                      onTap: () {
+                                        itemDetail(
+                                            context, snapshot.data[index]);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );

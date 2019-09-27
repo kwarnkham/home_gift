@@ -134,7 +134,7 @@ class _SignUpState extends State<SignUp> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
-                      prefixIcon: Icon(Icons.vpn_key),
+                      prefixIcon: Icon(Icons.lock),
                       suffixIcon: GestureDetector(
                         child: hiddenPassword1
                             ? Icon(Icons.visibility_off)
@@ -168,7 +168,7 @@ class _SignUpState extends State<SignUp> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password Confirmation',
-                      prefixIcon: Icon(Icons.vpn_key),
+                      prefixIcon: Icon(Icons.lock),
                       suffixIcon: GestureDetector(
                         child: hiddenPassword2
                             ? Icon(Icons.visibility_off)
