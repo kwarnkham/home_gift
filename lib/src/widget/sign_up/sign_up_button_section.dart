@@ -14,7 +14,7 @@ class SignUpButtonSection extends StatelessWidget {
             label: 'Register',
             onPress: () {
               submitSignUp().then((user) {
-                if (user == null) {
+                if (user.apiToken == null) {
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Sign Up Failed. Try using another phone number'),
@@ -26,7 +26,7 @@ class SignUpButtonSection extends StatelessWidget {
                     ),
                   );
                 }
-                if (user != null) {
+                if (user.apiToken != null) {
                   Navigator.of(context)
                       .pushReplacementNamed(Home.routeInfo['routeName']);
                 }

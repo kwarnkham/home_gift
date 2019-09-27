@@ -11,12 +11,12 @@ class UserBloc {
   final storage = new FlutterSecureStorage();
   User appUser = User();
 
-  // Future getUser() async {
-  //   await Future.delayed(
-  //     Duration(milliseconds: 1),
-  //     () => _controller.sink.add(appUser),
-  //   );
-  // }
+  Future getAppUser() async {
+    await Future.delayed(
+      Duration(milliseconds: 1),
+      () => _controller.sink.add(appUser),
+    );
+  }
 
   // Future getItems() async {
   //   List<User> items = await _repository.getItems();
@@ -26,10 +26,16 @@ class UserBloc {
   // }
 
   Future signUp(name, mobile, address, password, passwordConfirmation) async {
-    final user = await _repository.signUp(
+    appUser = await _repository.signUp(
         name, mobile, address, password, passwordConfirmation);
-    _controller.sink.add(user);
-    return user;
+    _controller.sink.add(appUser);
+    return appUser;
+  }
+
+  Future getAuthUser(token) async{
+    appUser = await _repository.getAuthUser(token);
+    _controller.sink.add(appUser);
+    return appUser;
   }
 
   dispose() {

@@ -3,18 +3,18 @@ import '../widget/bottom_navbar.dart';
 import '../widget/submit_button.dart';
 import './sign_up.dart';
 
-class User extends StatefulWidget {
+class Login extends StatefulWidget {
   static const Map<String, dynamic> routeInfo = {
-    'title': 'User',
-    'routeName': '/user',
+    'title': 'Login',
+    'routeName': '/login',
     'icon': Icons.person,
   };
 
   @override
-  _UserState createState() => _UserState();
+  _LoginState createState() => _LoginState();
 }
 
-class _UserState extends State<User> {
+class _LoginState extends State<Login> {
   GlobalKey _formKey = GlobalKey<FormState>();
   bool hiddenPassword = true;
   @override

@@ -10,7 +10,7 @@ class UserApi {
   Future<User> signUp(
       name, mobile, address, password, passwordConfirmation) async {
     String url = '/user';
-    User user;
+    User user =User();
     try {
       final response = await http.post(AppData.apiUrl + url, body: {
         'name': name,
@@ -23,6 +23,29 @@ class UserApi {
         user = User(jsonDecode(response.body)['result']['user']);
         user.apiToken = jsonDecode(response.body)['result']['token'];
         await storage.write(key: 'hGApiToken', value: user.apiToken);
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<User> getAuthUser(token) async {
+    String url = '/user';
+    User user = User();
+    try {
+      final response = await http.get(AppData.apiUrl + url, headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      });
+      // print(jsonDecode(response.body));
+      // print(response.statusCode);
+      if (jsonDecode(response.body)['code'] == '0') {
+        user = User(jsonDecode(response.body)['result']['user']);
+        user.apiToken = token;
+      }
+      if (response.statusCode == 401) {
+        await storage.delete(key: 'hGApiToken');
       }
       return user;
     } catch (error) {

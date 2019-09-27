@@ -21,22 +21,22 @@ class ItemDetailQuantity extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             IconButton(
-              icon: const Icon(Icons.keyboard_arrow_up),
-              onPressed: () {
-                upQty();
-              },
-            ),
-            Text(
-              'Quantity: $quantity',
-              style: const TextStyle(fontSize: 20),
-            ),
-            IconButton(
               icon: const Icon(Icons.keyboard_arrow_down),
               onPressed: quantity > 1
                   ? () {
                       downQty();
                     }
                   : null,
+            ),
+            Text(
+              'Quantity: $quantity',
+              style: const TextStyle(fontSize: 20),
+            ),
+            IconButton(
+              icon: const Icon(Icons.keyboard_arrow_up),
+              onPressed: () {
+                upQty();
+              },
             ),
           ],
         ),

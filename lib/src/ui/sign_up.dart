@@ -17,8 +17,9 @@ class _SignUpState extends State<SignUp> {
   Map<String, dynamic> formData = Map();
 
   Future submitSignUp() async {
-    isLoading = true;
-    print(isLoading);
+    setState(() {
+      isLoading = true;
+    });
     dynamic user;
     FocusScope.of(context).unfocus();
     if (_formKey.currentState.validate()) {
@@ -32,8 +33,9 @@ class _SignUpState extends State<SignUp> {
         formData['passwordConfirmation'],
       )
           .then((value) {
-        isLoading = false;
-        print(isLoading);
+        setState(() {
+          isLoading = false;
+        });
         user = value;
       });
     }
