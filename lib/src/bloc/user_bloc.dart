@@ -25,15 +25,27 @@ class UserBloc {
   //   }
   // }
 
-  Future signUp(name, mobile, address, password, passwordConfirmation) async {
+  Future<User> signUp(name, mobile, address, password, passwordConfirmation) async {
     appUser = await _repository.signUp(
         name, mobile, address, password, passwordConfirmation);
     _controller.sink.add(appUser);
     return appUser;
   }
 
-  Future getAuthUser(token) async{
+  Future<User> getAuthUser(token) async{
     appUser = await _repository.getAuthUser(token);
+    _controller.sink.add(appUser);
+    return appUser;
+  }
+
+  Future<User> login(mobile, password) async{
+    appUser = await _repository.login(mobile, password);
+    _controller.sink.add(appUser);
+    return appUser;
+  }
+
+  Future<User> logout(token) async{
+    appUser = await _repository.logout(token);
     _controller.sink.add(appUser);
     return appUser;
   }

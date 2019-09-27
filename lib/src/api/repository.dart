@@ -10,4 +10,6 @@ class Repository {
   Future<List<Item>> getItems() => _itemApi.getItems();
   Future<User> signUp(name, mobile, address, password, passwordConfirmation) => _userApi.signUp(name, mobile, address, password, passwordConfirmation);
   Future<User> getAuthUser(token) => _userApi.getAuthUser(token);
+  Future<User> login(mobile, password)=> _userApi.login(mobile, password);
+  Future<User> logout(token) => _userApi.logout(token);
 }

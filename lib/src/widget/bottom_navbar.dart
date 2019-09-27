@@ -58,7 +58,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
                   });
                   if (routedItem != null) {
                     Navigator.of(context)
-                        .pushReplacementNamed(routedItem['routeName']);
+                        .pushNamedAndRemoveUntil(routedItem['routeName'],ModalRoute.withName('/'));
                   }
                 },
                 currentIndex: widget.index,

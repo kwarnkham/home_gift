@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../widget/home_gift_wrapper.dart';
-import '../widget/sign_up/sign_up_button_section.dart';
 import '../bloc/user_bloc.dart';
+import '../ui/home.dart';
+import '../widget/submit_button.dart';
+import './login.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -9,18 +11,14 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   bool hiddenPassword1 = true;
   bool hiddenPassword2 = true;
   String password;
   Map<String, dynamic> formData = Map();
+  bool isLoading = false;
 
-  Future submitSignUp() async {
-    setState(() {
-      isLoading = true;
-    });
-    dynamic user;
+  Future submitSignUp(context) async {
     FocusScope.of(context).unfocus();
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -33,13 +31,29 @@ class _SignUpState extends State<SignUp> {
         formData['passwordConfirmation'],
       )
           .then((value) {
-        setState(() {
-          isLoading = false;
-        });
-        user = value;
+        if (value.apiToken != null) {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+          if (!Navigator.of(context).canPop()) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                Home.routeInfo['routeName'],ModalRoute.withName('/'));
+          }
+        }
+        if (value.apiToken == null) {
+          Scaffold.of(context).hideCurrentSnackBar();
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Sign Up Failed. Try using another phone number'),
+              action: SnackBarAction(
+                label: 'Close',
+                onPressed: () {},
+              ),
+            ),
+          );
+        }
       });
     }
-    return user;
   }
 
   @override
@@ -61,7 +75,7 @@ class _SignUpState extends State<SignUp> {
                     onSaved: (value) {
                       formData['name'] = value;
                     },
-                    autofocus: true,
+                    autofocus: false,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.person),
                       border: OutlineInputBorder(),
@@ -198,11 +212,27 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: 20,
                   ),
-                  SignUpButtonSection(submitSignUp),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      SubmitButton(
+                        label: 'Sign Up',
+                        onPressed: submitSignUp,
+                      ),
+                      FlatButton(
+                        textTheme: ButtonTextTheme.primary,
+                        child: Text('Login'),
+                        onPressed: () {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Login.routeInfo['routeName'],
+                              ModalRoute.withName('/'));
+                        },
+                      )
+                    ],
+                  ),
                   SizedBox(
                     height: 20,
                   ),
-                  isLoading ? LinearProgressIndicator() : SizedBox(),
                 ],
               ),
             ),

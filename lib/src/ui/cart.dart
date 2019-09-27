@@ -7,6 +7,7 @@ import '../widget/cart/cart_bottom_app_bar.dart';
 import '../widget/cart/cart_app_bar.dart';
 import '../widget/cart/no_item_in_cart.dart';
 
+
 class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

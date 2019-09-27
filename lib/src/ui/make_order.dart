@@ -69,7 +69,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     height: 20,
                   ),
                   TextFormField(
-                    autofocus: true,
+                    autofocus: false,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.phone_iphone),
@@ -92,7 +92,7 @@ class _MakeOrderState extends State<MakeOrder> {
                   SizedBox(
                     height: 20,
                   ),
-                  SubmitButton(label: 'Send Order', onPress: () {}),
+                  SubmitButton(label: 'Send Order', onPressed: () {}),
                 ],
               ),
             ),
