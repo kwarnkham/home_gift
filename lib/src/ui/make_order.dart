@@ -4,16 +4,22 @@ import '../widget/submit_button.dart';
 import '../bloc/user_bloc.dart';
 import '../model/user.dart';
 
+enum PaymentMethod { cash, visa, mpu }
+
 class MakeOrder extends StatefulWidget {
   @override
   _MakeOrderState createState() => _MakeOrderState();
 }
 
-class _MakeOrderState extends State<MakeOrder> {
+class _MakeOrderState extends State<MakeOrder>
+    with SingleTickerProviderStateMixin {
   GlobalKey _formKey = new GlobalKey<FormState>();
+  PaymentMethod _method = PaymentMethod.visa;
+  bool _hasNote;
 
   @override
   void initState() {
+    _hasNote = false;
     userBloc.getAppUser();
     super.initState();
   }
@@ -37,7 +43,7 @@ class _MakeOrderState extends State<MakeOrder> {
         // bottomNavigationBar: MakeOrderBottomAppBar(),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
             child: StreamBuilder<User>(
                 stream: userBloc.user,
                 builder: (context, snapshot) {
@@ -46,6 +52,7 @@ class _MakeOrderState extends State<MakeOrder> {
                       autovalidate: false,
                       key: _formKey,
                       child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           TextFormField(
                             initialValue: snapshot.data.name,
@@ -105,8 +112,70 @@ class _MakeOrderState extends State<MakeOrder> {
                               return null;
                             },
                           ),
+                          Row(
+                            children: <Widget>[
+                              Switch(
+                                value: _hasNote,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _hasNote = value;
+                                  });
+                                },
+                              ),
+                              Text(
+                                'Add Note',
+                                style: TextStyle(fontStyle: FontStyle.italic),
+                              ),
+                            ],
+                          ),
+                          if(_hasNote) TextFormField(
+                            autofocus: false,
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.note),
+                                border: OutlineInputBorder(),
+                                labelText: 'Note'),
+                          ),
                           SizedBox(
                             height: 20,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Payment Method',
+                                style: TextStyle(fontSize: 25),
+                              ),
+                              RadioListTile<PaymentMethod>(
+                                title: const Text('VISA'),
+                                value: PaymentMethod.visa,
+                                groupValue: _method,
+                                onChanged: (PaymentMethod value) {
+                                  setState(() {
+                                    _method = value;
+                                  });
+                                },
+                              ),
+                              RadioListTile<PaymentMethod>(
+                                title: const Text('Cash'),
+                                value: PaymentMethod.cash,
+                                groupValue: _method,
+                                onChanged: (PaymentMethod value) {
+                                  setState(() {
+                                    _method = value;
+                                  });
+                                },
+                              ),
+                              RadioListTile<PaymentMethod>(
+                                title: const Text('MPU'),
+                                value: PaymentMethod.mpu,
+                                groupValue: _method,
+                                onChanged: (PaymentMethod value) {
+                                  setState(() {
+                                    _method = value;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                           SubmitButton(label: 'Send Order', onPressed: () {}),
                         ],
