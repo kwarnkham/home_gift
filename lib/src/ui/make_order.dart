@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../home_gift_theme.dart';
-import '../widget/submit_button.dart';
 import '../bloc/user_bloc.dart';
 import '../model/user.dart';
+import '../ui/cart.dart';
+import '../bloc/cart_item_bloc.dart';
+import '../model/cart_item.dart';
+import '../bloc/order_bloc.dart';
 
 enum PaymentMethod { cash, visa, mpu }
 
@@ -13,19 +16,35 @@ class MakeOrder extends StatefulWidget {
 
 class _MakeOrderState extends State<MakeOrder>
     with SingleTickerProviderStateMixin {
-  GlobalKey _formKey = new GlobalKey<FormState>();
-  PaymentMethod _method = PaymentMethod.visa;
+  final _formKey = new GlobalKey<FormState>();
+  PaymentMethod _method = PaymentMethod.cash;
   bool _hasNote;
+  Map<String, dynamic> _inputData = Map();
+  List<CartItem> _cartItem;
+  OrderBloc orderBloc;
+  User user;
 
   @override
   void initState() {
+    orderBloc = OrderBloc();
+    userBloc.user.listen((value) {
+      orderBloc.getOrders(value);
+    });
+    userBloc.getAppUser();
+    
+    
     _hasNote = false;
     userBloc.getAppUser();
+    cartItemBloc.items.listen((value) {
+      _cartItem = value;
+    });
+    cartItemBloc.getCartItems();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(_cartItem);
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -40,10 +59,9 @@ class _MakeOrderState extends State<MakeOrder>
         appBar: AppBar(
           title: Text('Make Order'),
         ),
-        // bottomNavigationBar: MakeOrderBottomAppBar(),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: StreamBuilder<User>(
                 stream: userBloc.user,
                 builder: (context, snapshot) {
@@ -52,9 +70,11 @@ class _MakeOrderState extends State<MakeOrder>
                       autovalidate: false,
                       key: _formKey,
                       child: Column(
-                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           TextFormField(
+                            onSaved: (value) {
+                              _inputData['name'] = value;
+                            },
                             initialValue: snapshot.data.name,
                             decoration: InputDecoration(
                               prefixIcon: Icon(Icons.person),
@@ -72,6 +92,9 @@ class _MakeOrderState extends State<MakeOrder>
                             height: 20,
                           ),
                           TextFormField(
+                            onSaved: (value) {
+                              _inputData['address'] = value;
+                            },
                             initialValue: snapshot.data.address,
                             keyboardType: TextInputType.multiline,
                             maxLines: 3,
@@ -91,6 +114,9 @@ class _MakeOrderState extends State<MakeOrder>
                             height: 20,
                           ),
                           TextFormField(
+                            onSaved: (value) {
+                              _inputData['mobile'] = value;
+                            },
                             initialValue: snapshot.data.mobile,
                             autofocus: false,
                             keyboardType: TextInputType.phone,
@@ -105,8 +131,8 @@ class _MakeOrderState extends State<MakeOrder>
                               }
                               if (int.tryParse(value) == null ||
                                   int.parse(value) < 0 ||
-                                  value.length < 9 ||
-                                  value.length > 11) {
+                                  value.length < 7 ||
+                                  value.length > 9) {
                                 return 'Enter real Phone Number';
                               }
                               return null;
@@ -119,6 +145,9 @@ class _MakeOrderState extends State<MakeOrder>
                                 onChanged: (value) {
                                   setState(() {
                                     _hasNote = value;
+                                    if (!value) {
+                                      _inputData.remove('note');
+                                    }
                                   });
                                 },
                               ),
@@ -128,13 +157,19 @@ class _MakeOrderState extends State<MakeOrder>
                               ),
                             ],
                           ),
-                          if(_hasNote) TextFormField(
-                            autofocus: false,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.note),
-                                border: OutlineInputBorder(),
-                                labelText: 'Note'),
-                          ),
+                          if (_hasNote)
+                            TextFormField(
+                              onSaved: (value) {
+                                _inputData['note'] = value;
+                              },
+                              autofocus: false,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                  prefixIcon: Icon(Icons.note),
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Note'),
+                            ),
                           SizedBox(
                             height: 20,
                           ),
@@ -177,7 +212,52 @@ class _MakeOrderState extends State<MakeOrder>
                               ),
                             ],
                           ),
-                          SubmitButton(label: 'Send Order', onPressed: () {}),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              OutlineButton(
+                                borderSide: BorderSide(
+                                    color: HomeGiftTheme.primaryColor,
+                                    width: 2),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.navigate_before,
+                                      color: HomeGiftTheme.secondayColor,
+                                    ),
+                                    Text('Items'),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => Cart()));
+                                },
+                              ),
+                              OutlineButton(
+                                borderSide: BorderSide(
+                                    color: HomeGiftTheme.primaryColor,
+                                    width: 2),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text('Next'),
+                                    Icon(
+                                      Icons.navigate_next,
+                                      color: HomeGiftTheme.secondayColor,
+                                    )
+                                  ],
+                                ),
+                                onPressed: () {
+                                  if (_formKey.currentState.validate()) {
+                                    _formKey.currentState.save();
+                                    _inputData['payment'] =
+                                        _method.toString().split('.').last;
+                                  }
+                                },
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     );
