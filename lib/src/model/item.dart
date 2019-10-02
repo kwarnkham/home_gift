@@ -2,6 +2,7 @@ import './merchant.dart';
 import './category.dart';
 import './image.dart';
 import './location.dart';
+import 'dart:convert';
 
 class Item {
   int id;
@@ -39,4 +40,17 @@ class Item {
       merchant = Merchant(json['merchant']);
     }
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'price': price,
+        'description': description,
+        'notice': notice,
+        'weight': weight,
+        'categories': categories,
+        'images': images,
+        'location': location,
+        'merchant': merchant
+      };
 }

@@ -37,6 +37,11 @@ class CartItemBloc {
     _controller.sink.add(_cartItems);
   }
 
+  clearCart() {
+    _cartItems = List();
+    _controller.sink.add(_cartItems);
+  }
+
   dispose() {
     _controller.close();
   }

@@ -57,7 +57,7 @@ class OrderItem {
     price = item['price'];
     description = item['description'];
     notice = item['notice'];
-    weight = item['weight'];
+    weight = item['weight'].toDouble();
     locationId = item['location_id'];
     merchantId = item['merchant_id'];
   }

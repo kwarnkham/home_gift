@@ -7,4 +7,10 @@ class Image {
     name = json['name'];
     itemId = json['item_id'];
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'itemId': itemId,
+      };
 }

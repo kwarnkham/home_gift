@@ -7,8 +7,8 @@ import '../../bloc/user_bloc.dart';
 import '../home_gift_wrapper.dart';
 
 class CartBottomAppBar extends StatelessWidget {
-  goToMakeOrder(context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => MakeOrder()));
+  goToMakeOrder(context, User user) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => MakeOrder(user)));
   }
 
   @override
@@ -31,7 +31,7 @@ class CartBottomAppBar extends StatelessWidget {
                   child: Text('Make Order'),
                   onPressed: () {
                     if (snapshot.data.apiToken != null) {
-                      goToMakeOrder(context);
+                      goToMakeOrder(context, snapshot.data);
                     }
                     if (snapshot.data.apiToken == null) {
                       Navigator.of(context).push(MaterialPageRoute(

@@ -10,9 +10,17 @@ class OrderBloc {
   Stream<List<Order>> get orders => _controller.stream;
 
   Future getOrders(user) async {
-    List<Order> items = await _repository.getOrders(user);
+    List<Order> orders = await _repository.getOrders(user);
     if (!_controller.isClosed) {
-      _controller.sink.add(items);
+      _controller.sink.add(orders);
+    }
+  }
+
+  Future submitOrder(Map<String, dynamic> orderInfo, cartItems, user) async {
+    List<Order> orders =
+        await _repository.submitOrder(orderInfo, cartItems, user);
+    if (!_controller.isClosed) {
+      _controller.sink.add(orders);
     }
   }
 

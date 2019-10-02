@@ -21,7 +21,6 @@ class _UserSettingState extends State<UserSetting> {
   @override
   void initState() {
     isLoading = false;
-    userBloc.getAppUser();
     super.initState();
   }
 

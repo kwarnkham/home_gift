@@ -23,7 +23,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
     if (localToken == null) {
       userBloc.getAppUser();
     }
-    if (localToken != null){
+    if (localToken != null) {
       userBloc.getAuthUser(localToken);
     }
   }
@@ -57,8 +57,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
                     }
                   });
                   if (routedItem != null) {
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil(routedItem['routeName'],ModalRoute.withName('/'));
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        routedItem['routeName'], ModalRoute.withName('/'));
                   }
                 },
                 currentIndex: widget.index,

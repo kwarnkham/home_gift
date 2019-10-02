@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../home_gift_theme.dart';
+import '../../appData.dart';
 
 class CartAppBar extends StatelessWidget {
   final int cartQuantity;
@@ -16,7 +17,7 @@ class CartAppBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         title: FittedBox(
           child: Text(
-            'Delivery: 2000 MMK | Total: ${totalAmount + 2000} MMK',
+            'Delivery: ${AppData.deliveryFees} MMK | Total: ${totalAmount + AppData.deliveryFees} MMK',
             style: TextStyle(fontWeight: FontWeight.normal, fontSize: 11),
           ),
         ),
