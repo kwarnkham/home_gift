@@ -31,9 +31,7 @@ class _UserSettingState extends State<UserSetting> {
         appBar: AppBar(
           title: Text('Setting'),
         ),
-        bottomNavigationBar: BottomNavbar(
-          index: 2,
-        ),
+        bottomNavigationBar: BottomNavbar(ModalRoute.of(context).settings.arguments),
         body: StreamBuilder<User>(
             stream: userBloc.user,
             builder: (context, snapshot) {

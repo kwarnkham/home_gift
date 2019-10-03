@@ -8,13 +8,14 @@ import '../model/user.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class BottomNavbar extends StatefulWidget {
-  final int index;
-  BottomNavbar({this.index});
+  final int routedIndex;
+  BottomNavbar(this.routedIndex);
   @override
   _BottomNavbarState createState() => _BottomNavbarState();
 }
 
 class _BottomNavbarState extends State<BottomNavbar> {
+  int _currentIndex;
   User user;
   getAppUser() async {
     String localToken;
@@ -30,6 +31,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
 
   @override
   void initState() {
+    _currentIndex = widget.routedIndex;
     userBloc.user.listen((value) => user = value);
     getAppUser();
     super.initState();
@@ -43,13 +45,17 @@ class _BottomNavbarState extends State<BottomNavbar> {
           stream: userBloc.user,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              List<Map<String, dynamic>> navItems = [
-                Home.routeInfo,
-                History.routeInfo,
-                user.apiToken == null ? Login.routeInfo : UserSetting.routeInfo,
-              ];
+              List<Map<String, dynamic>> navItems = user.apiToken == null
+                  ? [
+                      Home.routeInfo,
+                      Login.routeInfo,
+                    ]
+                  : [Home.routeInfo, History.routeInfo, UserSetting.routeInfo];
               return BottomNavigationBar(
                 onTap: (navIndex) {
+                  // setState(() {
+                  //   _currentIndex = navIndex;
+                  // });
                   Map<String, dynamic> routedItem;
                   navItems.asMap().forEach((index, value) {
                     if (index == navIndex) {
@@ -58,10 +64,14 @@ class _BottomNavbarState extends State<BottomNavbar> {
                   });
                   if (routedItem != null) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                        routedItem['routeName'], ModalRoute.withName('/'));
+                      routedItem['routeName'],
+                      ModalRoute.withName('/'),
+                      
+                      arguments: navIndex
+                    );
                   }
                 },
-                currentIndex: widget.index,
+                currentIndex: _currentIndex,
                 selectedItemColor: Colors.teal,
                 unselectedItemColor: Colors.blueGrey,
                 backgroundColor: Theme.of(context).bottomAppBarColor,

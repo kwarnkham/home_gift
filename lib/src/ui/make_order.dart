@@ -5,7 +5,7 @@ import '../ui/cart.dart';
 import '../bloc/cart_item_bloc.dart';
 import '../model/cart_item.dart';
 import '../bloc/order_bloc.dart';
-import '../ui/home.dart';
+import '../ui/history.dart';
 
 enum PaymentMethod { cash, visa, mpu }
 
@@ -268,7 +268,7 @@ class _MakeOrderState extends State<MakeOrder>
                                   isLoading = false;
                                 });
                                 Navigator.of(context).pushNamedAndRemoveUntil(
-                                    Home.routeInfo['routeName'],
+                                    History.routeInfo['routeName'],
                                     ModalRoute.withName('/'));
                               });
                             }

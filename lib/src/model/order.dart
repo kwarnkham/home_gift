@@ -11,6 +11,7 @@ class Order {
   String status;
   String cNote;
   String aNote;
+  DateTime createdAt;
   List<OrderItem> _items = List();
 
   Order(Map<String, dynamic> json) {
@@ -24,8 +25,10 @@ class Order {
     deliveryFees = json['delivery_fees'];
     amount = json['amount'];
     status = json['status'];
-    cNote = json['cNote'];
-    aNote = json['aNote'];
+    cNote = json['c_note'];
+    aNote = json['a_note'];
+    createdAt = DateTime.parse(json['created_at']).add(Duration(minutes:390));
+
     List<OrderItem> temp = [];
     for (int i = 0; i < json['items'].length; i++) {
       OrderItem item = OrderItem(json['items'][i]['pivot']);

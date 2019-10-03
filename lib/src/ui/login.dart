@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
       appBar: AppBar(
         title: Text('Login'),
       ),
-      bottomNavigationBar: BottomNavbar(index: 2),
+      bottomNavigationBar: BottomNavbar(ModalRoute.of(context).settings.arguments),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: LoginForm(),

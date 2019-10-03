@@ -49,88 +49,91 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      autovalidate: false,
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-            onSaved: (value) {
-              inputData['mobile'] = value;
-            },
-            autofocus: false,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Phone Number',
-              prefix: Text('09'),
-              prefixIcon: Icon(Icons.phone_iphone),
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Phone Number cannot be empty';
-              }
-              if (int.tryParse(value) == null ||
-                  int.parse(value) < 0 ||
-                  value.length < 7 ||
-                  value.length > 9) {
-                return 'Enter real Phone Number';
-              }
-              return null;
-            },
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            onSaved: (value) {
-              inputData['password'] = value;
-            },
-            obscureText: hiddenPassword,
-            keyboardType: TextInputType.visiblePassword,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Password',
-              prefixIcon: Icon(Icons.vpn_key),
-              suffixIcon: GestureDetector(
-                child: hiddenPassword
-                    ? Icon(Icons.visibility_off)
-                    : Icon(Icons.visibility),
-                onTap: () {
-                  setState(() {
-                    hiddenPassword = !hiddenPassword;
-                  });
-                },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Form(
+        autovalidate: false,
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              onSaved: (value) {
+                inputData['mobile'] = value;
+              },
+              autofocus: false,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Phone Number',
+                prefix: Text('09'),
+                prefixIcon: Icon(Icons.phone_iphone),
               ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Phone Number cannot be empty';
+                }
+                if (int.tryParse(value) == null ||
+                    int.parse(value) < 0 ||
+                    value.length < 7 ||
+                    value.length > 9) {
+                  return 'Enter real Phone Number';
+                }
+                return null;
+              },
             ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Password cannot be empty';
-              }
-              return null;
-            },
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SubmitButton(
-                onPressed: submitLogin,
-                label: 'Login',
+            SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              onSaved: (value) {
+                inputData['password'] = value;
+              },
+              obscureText: hiddenPassword,
+              keyboardType: TextInputType.visiblePassword,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.vpn_key),
+                suffixIcon: GestureDetector(
+                  child: hiddenPassword
+                      ? Icon(Icons.visibility_off)
+                      : Icon(Icons.visibility),
+                  onTap: () {
+                    setState(() {
+                      hiddenPassword = !hiddenPassword;
+                    });
+                  },
+                ),
               ),
-              FlatButton(
-                textTheme: ButtonTextTheme.primary,
-                child: Text('Sign Up'),
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushReplacement(MaterialPageRoute(builder: (_) => SignUp()));
-                },
-              )
-            ],
-          )
-        ],
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Password cannot be empty';
+                }
+                return null;
+              },
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SubmitButton(
+                  onPressed: submitLogin,
+                  label: 'Login',
+                ),
+                FlatButton(
+                  textTheme: ButtonTextTheme.primary,
+                  child: Text('Sign Up'),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute(builder: (_) => SignUp()));
+                  },
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
