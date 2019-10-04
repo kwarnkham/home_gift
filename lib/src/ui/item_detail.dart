@@ -10,7 +10,8 @@ import '../widget/item_detail/item_detail_bottom_app_bar.dart';
 
 class ItemDetail extends StatefulWidget {
   final Item item;
-  ItemDetail({this.item});
+  final bool canBeAdded;
+  ItemDetail({@required this.item, this.canBeAdded = true});
 
   @override
   _ItemDetailState createState() => _ItemDetailState();
@@ -76,6 +77,7 @@ class _ItemDetailState extends State<ItemDetail> {
           elevation: 0,
           title: Text(widget.item.name),
           actions: <Widget>[
+            if(widget.canBeAdded)
             IconButton(
               iconSize: 40,
               icon: StreamBuilder<List<CartItem>>(
@@ -101,7 +103,7 @@ class _ItemDetailState extends State<ItemDetail> {
             )
           ],
         ),
-        bottomNavigationBar: ItemDetailBottomAppBar(addToCart),
+        bottomNavigationBar: widget.canBeAdded? ItemDetailBottomAppBar(addToCart): SizedBox(),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -136,10 +138,8 @@ class _ItemDetailState extends State<ItemDetail> {
                 SizedBox(
                   height: 20,
                 ),
+                if(widget.canBeAdded)
                 ItemDetailQuantity(quantity, upQty, downQty),
-                SizedBox(
-                  height: 20,
-                ),
               ],
             ),
           ),

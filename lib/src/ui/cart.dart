@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../home_gift_theme.dart';
+import '../widget/home_gift_wrapper.dart';
 import '../bloc/cart_item_bloc.dart';
 import '../model/cart_item.dart';
 import '../widget/cart/added_cart_items.dart';
@@ -12,17 +12,8 @@ class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     cartItemBloc.getCartItems();
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: HomeGiftTheme.gradientStart,
-            end: HomeGiftTheme.graidentEnd,
-            colors: [
-              HomeGiftTheme.gradientFirstColor,
-              HomeGiftTheme.gradientSecondColor
-            ]),
-      ),
-      child: Scaffold(
+    return HomeGiftWrapper(
+          child: Scaffold(
         bottomNavigationBar: StreamBuilder<List<CartItem>>(
             stream: cartItemBloc.items,
             builder: (context, snapshot) {

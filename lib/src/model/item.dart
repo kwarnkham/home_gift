@@ -2,7 +2,6 @@ import './merchant.dart';
 import './category.dart';
 import './image.dart';
 import './location.dart';
-import 'dart:convert';
 
 class Item {
   int id;

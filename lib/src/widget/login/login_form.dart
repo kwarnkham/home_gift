@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../bloc/user_bloc.dart';
-import '../../ui/home.dart';
 import '../../widget/submit_button.dart';
 import '../../ui/sign_up.dart';
+import '../../app.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -26,6 +26,7 @@ class _LoginFormState extends State<LoginForm> {
           Scaffold.of(context).hideCurrentSnackBar();
           Scaffold.of(context).showSnackBar(
             SnackBar(
+              behavior: SnackBarBehavior.floating,
               content: Text('Information is incorrect'),
               action: SnackBarAction(
                 label: 'Close',
@@ -39,8 +40,9 @@ class _LoginFormState extends State<LoginForm> {
             Navigator.of(context).pop();
           }
           if (!Navigator.of(context).canPop()) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(Home.routeInfo['routeName'], ModalRoute.withName('/'));
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => App()),
+                ModalRoute.withName('/'));
           }
         }
       });
@@ -50,7 +52,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.all(10),
       child: Form(
         autovalidate: false,
         key: _formKey,
@@ -127,7 +129,7 @@ class _LoginFormState extends State<LoginForm> {
                   child: Text('Sign Up'),
                   onPressed: () {
                     Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(builder: (_) => SignUp()));
+                        .push(MaterialPageRoute(builder: (_) => SignUp()));
                   },
                 )
               ],

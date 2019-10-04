@@ -5,102 +5,99 @@ import 'widget/login/login_form.dart';
 import 'ui/about.dart';
 import './widget/home_gift_wrapper.dart';
 import './home_gift_theme.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import './bloc/user_bloc.dart';
 import 'ui/user_setting.dart';
 import 'widget/fab.dart';
 import 'widget/bottom_tab_bar.dart';
 import 'ui/search_item.dart';
+import './widget/auth_data.dart';
 
-class App extends StatelessWidget {
-  Future<bool> _exitApp(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: ((_) => AlertDialog(
-            title: new Text('Do you want to exit this application?'),
-            // content: new Text('We hate to see you leave...'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('No'),
-              ),
-              new FlatButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: new Text('Yes'),
-              ),
-            ],
-          )),
-    );
+class App extends StatefulWidget {
+  final int initialTab;
+  App({this.initialTab = 0});
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> with SingleTickerProviderStateMixin {
+  TabController _controller;
+
+  _exitApp(BuildContext context) {
+    Navigator.of(context).pop(false);
   }
 
-  _searchItem(context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => SearchItem()));
-  }
-
-  initalizeToken() async {
-    final storage = new FlutterSecureStorage();
-    String localToken = await storage.read(key: 'hGApiToken');
-    if (localToken != null) {
-      userBloc.getAuthUser(localToken);
-    }
-  }
-
-  App() {
-    initalizeToken();
+  @override
+  void initState() {
+    _controller = new TabController(vsync: this, length: 5, initialIndex: widget.initialTab);
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
+    final _apiToken = AuthData.of(context).user.apiToken;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          appBarTheme: AppBarTheme(color: Colors.transparent, elevation: 0),
-          scaffoldBackgroundColor: Colors.transparent,
-          primarySwatch: HomeGiftTheme.primarcySwatch,
-          accentColor: HomeGiftTheme.secondayColor,
-          bottomAppBarColor: HomeGiftTheme.primaryColor),
+        appBarTheme: AppBarTheme(color: Colors.transparent, elevation: 0),
+        scaffoldBackgroundColor: Colors.transparent,
+        primarySwatch: HomeGiftTheme.primarcySwatch,
+        accentColor: HomeGiftTheme.secondayColor,
+        bottomAppBarColor: HomeGiftTheme.primaryColor,
+      ),
       title: 'Home Gift',
       home: WillPopScope(
         onWillPop: () => _exitApp(context),
         child: HomeGiftWrapper(
-          child: DefaultTabController(
-            length: 5,
-            child: Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                backgroundColor: HomeGiftTheme.gradientFirstColor,
-                title: Text('Home Gift'),
-                actions: <Widget>[
-                  Builder(
-                    builder: (context) => IconButton(
-                      icon: Icon(
-                        Icons.search,
-                        color: HomeGiftTheme.primarcySwatch,
-                      ),
-                      onPressed: () {
-                        _searchItem(context);
-                      },
-                      iconSize: 40,
-                    ),
-                  ),
-                ],
-              ),
-              bottomNavigationBar: BottomTabBar(),
-              floatingActionButton: Fab(),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-              body: TabBarView(
-                children: <Widget>[
-                  Home(),
-                  History(),
-                  SizedBox(),
-                  LoginForm(),
-                  About(),
-                ],
-              ),
+          child: Scaffold(
+            resizeToAvoidBottomPadding: false,
+            appBar: MyAppBar(),
+            bottomNavigationBar: BottomTabBar(controller: _controller,),
+            floatingActionButton: Fab(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            body: TabBarView(
+              controller: _controller,
+              children: <Widget>[
+                Home(),
+                History(),
+                Image.asset('assets/images/item_placeholder.png'),
+                _apiToken == null ? LoginForm() : UserSetting(),
+                About(),
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  _searchItem(context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => SearchItem()));
+  }
+
+  @override
+  Size get preferredSize => new Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: HomeGiftTheme.gradientFirstColor,
+      title: Text('Home Gift'),
+      actions: <Widget>[
+        Builder(
+          builder: (context) => IconButton(
+            icon: Icon(
+              Icons.search,
+              color: HomeGiftTheme.primarcySwatch,
+            ),
+            onPressed: () {
+              _searchItem(context);
+            },
+            iconSize: 40,
+          ),
+        ),
+      ],
     );
   }
 }

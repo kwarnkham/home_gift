@@ -5,7 +5,7 @@ import '../ui/cart.dart';
 import '../bloc/cart_item_bloc.dart';
 import '../model/cart_item.dart';
 import '../bloc/order_bloc.dart';
-import '../ui/history.dart';
+import '../app.dart';
 
 enum PaymentMethod { cash, visa, mpu }
 
@@ -267,8 +267,8 @@ class _MakeOrderState extends State<MakeOrder>
                                 setState(() {
                                   isLoading = false;
                                 });
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    History.routeInfo['routeName'],
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(builder: (_)=>App(initialTab: 1,)),
                                     ModalRoute.withName('/'));
                               });
                             }

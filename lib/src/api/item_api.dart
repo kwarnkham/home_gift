@@ -9,7 +9,7 @@ class ItemApi {
     List<Item> items = List();
     try {
       final response = await http.get(AppData.apiUrl + url);
-
+      // print(jsonDecode(response.body)['result']);
       if (jsonDecode(response.body)['code'] == '0') {
         List jsonItems = jsonDecode(response.body)['result'];
         for (int i = 0; i < jsonItems.length; i++) {

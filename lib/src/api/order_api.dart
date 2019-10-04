@@ -14,7 +14,7 @@ class OrderApi {
         'Authorization': 'Bearer ${user.apiToken}',
         'Accept': 'application/json',
       });
-      // print(jsonDecode(response.body));
+      // print(jsonDecode(response.body)['result'][0]['items']);
       if (jsonDecode(response.body)['code'] == '0') {
         List jsonOrders = jsonDecode(response.body)['result'];
         for (int i = 0; i < jsonOrders.length; i++) {

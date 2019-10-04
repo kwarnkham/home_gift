@@ -3,7 +3,7 @@ import '../home_gift_theme.dart';
 import '../ui/search_item.dart';
 import '../widget/home/home_carosel.dart';
 import '../widget/home/home_locations.dart';
-import '../widget/bottom_navbar.dart';
+
 import '../widget/home/home_items.dart';
 import '../widget/fab.dart';
 

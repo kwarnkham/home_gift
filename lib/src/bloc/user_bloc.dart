@@ -12,6 +12,7 @@ class UserBloc {
   User appUser = User();
 
   Future getAppUser() async {
+    print('get app');
     await Future.delayed(
       Duration(milliseconds: 1),
       () => _controller.sink.add(appUser),
@@ -33,6 +34,7 @@ class UserBloc {
   }
 
   Future<User> getAuthUser(token) async{
+    print('get auth');
     appUser = await _repository.getAuthUser(token);
     _controller.sink.add(appUser);
     return appUser;

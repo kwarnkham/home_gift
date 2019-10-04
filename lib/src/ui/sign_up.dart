@@ -3,7 +3,7 @@ import '../widget/home_gift_wrapper.dart';
 import '../bloc/user_bloc.dart';
 import '../ui/home.dart';
 import '../widget/submit_button.dart';
-import './login.dart';
+import '../app.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -32,18 +32,15 @@ class _SignUpState extends State<SignUp> {
       )
           .then((value) {
         if (value.apiToken != null) {
-          if (Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
-          }
-          if (!Navigator.of(context).canPop()) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                Home.routeInfo['routeName'],ModalRoute.withName('/'));
-          }
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => App()),
+              ModalRoute.withName('/'));
         }
         if (value.apiToken == null) {
           Scaffold.of(context).hideCurrentSnackBar();
           Scaffold.of(context).showSnackBar(
             SnackBar(
+              behavior: SnackBarBehavior.floating,
               content: Text('Sign Up Failed. Try using another phone number'),
               action: SnackBarAction(
                 label: 'Close',
@@ -223,9 +220,7 @@ class _SignUpState extends State<SignUp> {
                         textTheme: ButtonTextTheme.primary,
                         child: Text('Login'),
                         onPressed: () {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              Login.routeInfo['routeName'],
-                              ModalRoute.withName('/'));
+                          Navigator.of(context).pop();
                         },
                       )
                     ],

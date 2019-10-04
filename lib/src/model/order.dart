@@ -1,3 +1,5 @@
+import './item.dart';
+
 class Order {
   int id;
   int userId;
@@ -27,11 +29,11 @@ class Order {
     status = json['status'];
     cNote = json['c_note'];
     aNote = json['a_note'];
-    createdAt = DateTime.parse(json['created_at']).add(Duration(minutes:390));
+    createdAt = DateTime.parse(json['created_at']).add(Duration(minutes: 390));
 
     List<OrderItem> temp = [];
     for (int i = 0; i < json['items'].length; i++) {
-      OrderItem item = OrderItem(json['items'][i]['pivot']);
+      OrderItem item = OrderItem(json['items'][i]['pivot'], json['items'][i]);
       temp.add(item);
     }
     _items = temp;
@@ -42,26 +44,27 @@ class Order {
 
 class OrderItem {
   int orderId;
+  int quantity;
   int itemId;
   String name;
-  int quantity;
   int price;
   String description;
   String notice;
   double weight;
   int locationId;
   int merchantId;
-
-  OrderItem(item) {
-    orderId = item['order_id'];
-    itemId = item['item_id'];
-    name = item['name'];
-    quantity = item['quantity'];
-    price = item['price'];
-    description = item['description'];
-    notice = item['notice'];
-    weight = item['weight'].toDouble();
-    locationId = item['location_id'];
-    merchantId = item['merchant_id'];
+  Item item;
+  OrderItem(jsonOrderItem, jsonItem) {
+    orderId = jsonOrderItem['order_id'];
+    quantity = jsonOrderItem['quantity'];
+    itemId = jsonOrderItem['item_id'];
+    name = jsonOrderItem['name'];
+    price = jsonOrderItem['price'];
+    description = jsonOrderItem['description'];
+    notice = jsonOrderItem['notice'];
+    weight = jsonOrderItem['weight'].toDouble();
+    locationId = jsonOrderItem['location_id'];
+    merchantId = jsonOrderItem['merchant_id'];
+    item = Item(jsonItem);
   }
 }
