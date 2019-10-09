@@ -21,10 +21,12 @@ class History extends StatefulWidget {
 class _HistoryState extends State<History> {
   OrderBloc _orderBloc;
   String _filter;
+  List<Order> userOrders;
   @override
   void initState() {
     _filter = 'this week';
     _orderBloc = OrderBloc();
+    userOrders = List();
     super.initState();
   }
 
@@ -131,9 +133,11 @@ class _HistoryState extends State<History> {
                     stream: _orderBloc.orders,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
+                        // print(snapshot.data[0].toJson());
+                        snapshot.data.forEach((el) => userOrders.add(el));
                         return snapshot.data.length > 0
                             ? ListView.builder(
-                                itemCount: snapshot.data.length,
+                                itemCount: userOrders.length,
                                 itemBuilder: (_, index) => Card(
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -148,7 +152,7 @@ class _HistoryState extends State<History> {
                                                   Colors.orangeAccent,
                                               radius: 30,
                                               child: Text(
-                                                '${snapshot.data[index].status}',
+                                                '${userOrders[index].status}',
                                                 style: TextStyle(fontSize: 12),
                                               ),
                                             ),
@@ -160,7 +164,7 @@ class _HistoryState extends State<History> {
                                                   CrossAxisAlignment.end,
                                               children: <Widget>[
                                                 Text(
-                                                  '${DateFormat('yMMMd').format(snapshot.data[index].createdAt)}',
+                                                  '${DateFormat('yMMMd').format(userOrders[index].createdAt)}',
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -169,7 +173,7 @@ class _HistoryState extends State<History> {
                                                   height: 10,
                                                 ),
                                                 Text(
-                                                    '${DateFormat('jm').format(snapshot.data[index].createdAt)}'),
+                                                    '${DateFormat('jm').format(userOrders[index].createdAt)}'),
                                               ],
                                             ),
                                             Flexible(
@@ -197,44 +201,43 @@ class _HistoryState extends State<History> {
                                           height: 15,
                                         ),
                                         Text(
-                                            'Delivery Address: ${snapshot.data[index].address}'),
+                                            'Delivery Address: ${userOrders[index].address}'),
                                         Row(
                                           children: <Widget>[
                                             Text(
-                                                'Amount: ${snapshot.data[index].amount + AppData.deliveryFees} MMK'),
+                                                'Amount: ${userOrders[index].amount + AppData.deliveryFees} MMK'),
                                             IconButton(
                                               icon: Icon(Icons.visibility),
                                               onPressed: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            OrderAmountDetail(
-                                                                snapshot.data[
-                                                                    index])));
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      OrderAmountDetail(
+                                                          userOrders[index]),
+                                                ));
                                               },
                                             ),
                                             Flexible(
                                               child: SizedBox(),
                                               fit: FlexFit.tight,
                                             ),
-                                            if (snapshot.data[index].cNote ==
-                                                null)
+                                            if (userOrders[index].cNote == null)
                                               Text(
-                                                  'ID:  ${snapshot.data[index].id}')
+                                                  'ID:  ${userOrders[index].id}')
                                           ],
                                         ),
-                                        if (snapshot.data[index].cNote != null)
+                                        if (userOrders[index].cNote != null)
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
                                               Text(
-                                                'Note: ${snapshot.data[index].cNote}',
+                                                'Note: ${userOrders[index].cNote}',
                                                 style:
                                                     TextStyle(wordSpacing: 2),
                                               ),
                                               Text(
-                                                  'ID:  ${snapshot.data[index].id}')
+                                                  'ID:  ${userOrders[index].id}')
                                             ],
                                           ),
                                       ],

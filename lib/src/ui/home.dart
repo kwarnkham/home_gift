@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import '../home_gift_theme.dart';
-import '../ui/search_item.dart';
 import '../widget/home/home_carosel.dart';
 import '../widget/home/home_locations.dart';
-
 import '../widget/home/home_items.dart';
-import '../widget/fab.dart';
+
 
 class Home extends StatelessWidget {
   static const Map<String, dynamic> routeInfo = {

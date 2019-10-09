@@ -1,70 +1,44 @@
-import './item.dart';
+import './order_item.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'order.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 class Order {
   int id;
+  @JsonKey(name: 'user_id')
   int userId;
+  @JsonKey(name: 'promotion_id')
   int promotionId;
   String name;
   String mobile;
   String address;
   String payment;
+  @JsonKey(name: 'delivery_fees')
   int deliveryFees;
   int amount;
   String status;
+  @JsonKey(name: 'c_name')
   String cNote;
+  @JsonKey(name: 'a_note')
   String aNote;
+  @JsonKey(name: 'created_at')
   DateTime createdAt;
-  List<OrderItem> _items = List();
-
-  Order(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    promotionId = json['promotion_id'];
-    name = json['name'];
-    mobile = json['mobile'];
-    address = json['address'];
-    payment = json['payment'];
-    deliveryFees = json['delivery_fees'];
-    amount = json['amount'];
-    status = json['status'];
-    cNote = json['c_note'];
-    aNote = json['a_note'];
-    createdAt = DateTime.parse(json['created_at']).add(Duration(minutes: 390));
-
-    List<OrderItem> temp = [];
-    for (int i = 0; i < json['items'].length; i++) {
-      OrderItem item = OrderItem(json['items'][i]['pivot'], json['items'][i]);
-      temp.add(item);
-    }
-    _items = temp;
-  }
-
-  List<OrderItem> get items => _items;
-}
-
-class OrderItem {
-  int orderId;
-  int quantity;
-  int itemId;
-  String name;
-  int price;
-  String description;
-  String notice;
-  double weight;
-  int locationId;
-  int merchantId;
-  Item item;
-  OrderItem(jsonOrderItem, jsonItem) {
-    orderId = jsonOrderItem['order_id'];
-    quantity = jsonOrderItem['quantity'];
-    itemId = jsonOrderItem['item_id'];
-    name = jsonOrderItem['name'];
-    price = jsonOrderItem['price'];
-    description = jsonOrderItem['description'];
-    notice = jsonOrderItem['notice'];
-    weight = jsonOrderItem['weight'].toDouble();
-    locationId = jsonOrderItem['location_id'];
-    merchantId = jsonOrderItem['merchant_id'];
-    item = Item(jsonItem);
-  }
+  List<OrderItem> items = List();
+  Order(
+      this.id,
+      this.userId,
+      this.promotionId,
+      this.name,
+      this.mobile,
+      this.address,
+      this.payment,
+      this.deliveryFees,
+      this.amount,
+      this.status,
+      this.cNote,
+      this.aNote,
+      this.createdAt,
+      this.items);
+  factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
+  Map<String, dynamic> toJson() => _$OrderToJson(this);
 }

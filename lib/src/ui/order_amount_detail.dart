@@ -4,6 +4,7 @@ import '../model/order.dart';
 import 'package:intl/intl.dart';
 import '../appData.dart';
 import '../ui/item_detail.dart';
+import '../model/order_item.dart';
 
 class OrderAmountDetail extends StatelessWidget {
   final Order order;
@@ -23,6 +24,7 @@ class OrderAmountDetail extends StatelessWidget {
   OrderAmountDetail(this.order);
   @override
   Widget build(BuildContext context) {
+    // print(order.toJson());
     return HomeGiftWrapper(
       child: Scaffold(
         appBar: AppBar(
@@ -67,6 +69,15 @@ class OrderAmountDetail extends StatelessWidget {
                       label: Text('Amount'),
                     ),
                   ],
+                  // rows: [
+                  //   DataRow(cells: [
+                  //     DataCell(Text('hi')),
+                  //     DataCell(Text('hi')),
+                  //     DataCell(Text('hi')),
+                  //     DataCell(Text('hi')),
+                  //     DataCell(Text('hi')),
+                  //   ])
+                  // ],
                   rows: order.items.map((item) {
                     int counter = 1;
                     return DataRow(
@@ -85,9 +96,11 @@ class OrderAmountDetail extends StatelessWidget {
                         }),
                         DataCell(
                             SizedBox(
-                              width: 50,
-                                child: Text('${item.quantity * item.price}', textAlign: TextAlign.end,)),
-                            onTap: () {
+                                width: 50,
+                                child: Text(
+                                  '${item.quantity * item.price}',
+                                  textAlign: TextAlign.end,
+                                )), onTap: () {
                           showItemDetail(context, item);
                         }),
                       ],

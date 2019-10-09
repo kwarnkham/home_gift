@@ -37,6 +37,7 @@ class _HomeItemsState extends State<HomeItems> {
         stream: itemBloc.items,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            // print(snapshot.data[0].toJson());
             return SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

@@ -14,11 +14,11 @@ class OrderApi {
         'Authorization': 'Bearer ${user.apiToken}',
         'Accept': 'application/json',
       });
-      // print(jsonDecode(response.body)['result'][0]['items']);
+      
       if (jsonDecode(response.body)['code'] == '0') {
-        List jsonOrders = jsonDecode(response.body)['result'];
+        List jsonOrders = jsonDecode(response.body)['result']['data'];
         for (int i = 0; i < jsonOrders.length; i++) {
-          Order temp = Order(jsonOrders[i]);
+          Order temp = Order.fromJson(jsonOrders[i]);
           orders.add(temp);
         }
       }
@@ -59,15 +59,15 @@ class OrderApi {
         'Authorization': 'Bearer ${user.apiToken}',
         'Accept': 'application/json',
       });
+      print(jsonDecode(response.body));
+      // if (jsonDecode(response.body)['code'] == '0') {
+      //   List jsonOrders = jsonDecode(response.body)['result'];
+      //   for (int i = 0; i < jsonOrders.length; i++) {
+      //     Order temp = Order(jsonOrders[i]);
+      //     orders.add(temp);
+      //   }
+      // }
 
-      if (jsonDecode(response.body)['code'] == '0') {
-        List jsonOrders = jsonDecode(response.body)['result'];
-        for (int i = 0; i < jsonOrders.length; i++) {
-          Order temp = Order(jsonOrders[i]);
-          orders.add(temp);
-        }
-      }
-      // print(jsonDecode(response.body));
       return orders;
     } catch (error) {
       throw error;
